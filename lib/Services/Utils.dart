@@ -20,7 +20,7 @@ class Utils{
           ),
           content: ElevatedButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Dismiss', style: TextStyle(color: Colors.white),),
+            child: Text('Dismiss'),
             style: ElevatedButton.styleFrom(
               primary: Colors.black,
               onPrimary: Colors.white
@@ -47,7 +47,7 @@ class Utils{
           ),
           content: ElevatedButton(
             onPressed: function,
-            child: Text(actionText, style: TextStyle(color: Colors.white),),
+            child: Text(actionText),
             style: ElevatedButton.styleFrom(
               primary: Colors.black,
               onPrimary: Colors.white

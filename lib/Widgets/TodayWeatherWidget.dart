@@ -23,7 +23,6 @@ class TodayWeatherWidget extends StatelessWidget {
             child: Text(
               Jiffy(DateTime.now()).format("EE, MMM dd, yyyy"),
               style: TextStyle(
-                color: Colors.white,
                 fontWeight: FontWeight.bold,
                 fontSize: 20
               ),
@@ -58,7 +57,6 @@ class TodayWeatherWidget extends StatelessWidget {
                       Text(
                         todayWeatherViewModel!.locationName,
                         style: TextStyle(
-                          color: Colors.white,
                           fontWeight: FontWeight.bold,
                           fontSize: 20
                         ),
@@ -68,7 +66,6 @@ class TodayWeatherWidget extends StatelessWidget {
                           Text(
                             todayWeatherViewModel!.temp_Max.round().toString() + " \u2103",
                             style: TextStyle(
-                              color: Colors.white,
                               fontWeight: FontWeight.bold,
                               fontSize: 15
                             ),
@@ -89,7 +86,6 @@ class TodayWeatherWidget extends StatelessWidget {
                       Text(
                         todayWeatherViewModel!.condition,
                         style: TextStyle(
-                          color: Colors.white,
                           fontWeight: FontWeight.bold,
                           fontSize: 15
                         ),

@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:weather_one/Providers/LocationProvider.dart';
 import 'package:weather_one/Providers/WeatherProvider.dart';
-import 'package:weather_one/ViewModels/TodayWeatherViewModel.dart';
+import 'package:weather_one/Services/Utils.dart';
+import 'package:weather_one/Widgets/DailyWeatherListWidget.dart';
 import 'package:weather_one/Widgets/TodayWeatherWidget.dart';
 
 
@@ -33,7 +34,14 @@ class _HomeState extends State<Home> {
         lattitude = locationProvider.userLocation.latitude.toString();
         longitude = locationProvider.userLocation.longitude.toString();
 
-        weatherProvider.fetchTodayWeather(context, lattitude, longitude);
+        try{
+          weatherProvider.fetchTodayWeather(lattitude, longitude);
+          weatherProvider.fetchFiveDayForecastWeather(lattitude, longitude);
+        }
+        catch(e){
+          Utils.displayDialog(context, "An error occured, Please try again later");
+        }
+        
       }
 
     });
@@ -71,7 +79,7 @@ class _HomeState extends State<Home> {
               child: TodayWeatherWidget(todayWeatherViewModel:weatherProvider.todayWeatherViewModel)
             ): 
             Expanded(
-              flex: 1,
+              flex: 2,
               child: Center(
                 child: Text("Loading...")
               )
@@ -85,15 +93,23 @@ class _HomeState extends State<Home> {
                   height: 1.5,
                   width: 150.0,
                   color: Colors.white,
-                  margin: EdgeInsets.only(bottom: 25.0),
+                  margin: EdgeInsets.only(bottom: 15.0),
                 ),
               ),
             ),
 
+            weatherProvider.dailyWeatherViewModel != null ?
             Expanded(
               flex: 6,
-              child: Text("Hello", style: TextStyle(color: Colors.white))
+              child: DailyWeatherListWidget(dailyWeatherViewModel: weatherProvider.dailyWeatherViewModel)
+            ) :
+            Expanded(
+              flex: 6,
+              child: Center(
+                child: Text("Loading...")
+              )
             )
+
           ],
         ),
       )

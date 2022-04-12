@@ -21,6 +21,11 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        textTheme: TextTheme(
+          bodyText2: TextStyle(
+            color: Colors.white,
+          ),
+        )
       ),
       home: MultiProvider(
         providers: [
