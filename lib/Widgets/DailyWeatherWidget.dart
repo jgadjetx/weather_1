@@ -1,6 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
-import 'package:provider/provider.dart';
 import 'package:weather_one/Screens/DailyWeatherDetails.dart';
 import 'package:weather_one/ViewModels/DailyWeatherViewModel.dart';
 
@@ -45,15 +45,11 @@ class DailyWeatherWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: NetworkImage("http://openweathermap.org/img/wn/${weatherData.iconName}@2x.png")
-                      ),
-                      borderRadius: BorderRadius.circular(6)
-                    ),
                     width: 150, 
                     height: 100,
+                    child: CachedNetworkImage(
+                      imageUrl: "http://openweathermap.org/img/wn/${weatherData.iconName}@2x.png",
+                    ),
                   ),
                 ],
               )

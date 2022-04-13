@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import 'package:weather_one/Providers/LocationProvider.dart';
 import 'package:weather_one/Providers/WeatherProvider.dart';
 import 'package:weather_one/Services/Utils.dart';
 import 'package:weather_one/Widgets/DailyWeatherListWidget.dart';
+import 'package:weather_one/Widgets/ShimmerBlock.dart';
 import 'package:weather_one/Widgets/TodayWeatherWidget.dart';
-
 
 class Home extends StatefulWidget {
   Home({Key? key}) : super(key: key);
@@ -18,16 +19,13 @@ class _HomeState extends State<Home> {
 
   late WeatherProvider weatherProvider;
   late LocationProvider locationProvider;
-  bool gotUserLocation = false;
 
   var lattitude;
   var longitude;
 
   void getUserLocation() async{
 
-    await locationProvider.getLocation(context).then((value) async{
-
-      gotUserLocation = value;
+    await locationProvider.getLocation(context).then((gotUserLocation) async{
 
       if(gotUserLocation){
 
@@ -42,6 +40,16 @@ class _HomeState extends State<Home> {
           Utils.displayDialog(context, "An error occured, Please try again later");
         }
         
+      }
+      else{
+        
+        Utils.customDisplayDialog(context, "An error occured while getting your location, Please enable your location services", "Enable",() async{
+          Navigator.of(context).pop();
+          Geolocator.openLocationSettings().then((value){
+            getUserLocation();
+          });
+         
+        });
       }
 
     });
@@ -79,8 +87,15 @@ class _HomeState extends State<Home> {
                   if(weatherProvider.todayWeatherViewModel != null) {
                     return TodayWeatherWidget(todayWeatherViewModel:weatherProvider.todayWeatherViewModel);
                   }
-                  else{
-                    return Center(child: Text("Loading..."));
+                  else{ 
+                    return Center(
+                      child: Container(
+                        margin: EdgeInsets.only(bottom: 10),
+                        height: 60,
+                        width: 60,
+                        child: Image.asset("images/cloud.png"),
+                      ),  
+                    );
                   }
                   
                 }
@@ -108,8 +123,14 @@ class _HomeState extends State<Home> {
                   if(weatherProvider.dailyWeatherViewModel != null) {
                     return DailyWeatherListWidget(dailyWeatherViewModel: weatherProvider.dailyWeatherViewModel);
                   }
-                  else{
-                    return Center(child: Text("Loading..."));
+                  else{ 
+                    return Column(
+                      children: [
+                        ShimmerBlock(),
+                        ShimmerBlock(),
+                        ShimmerBlock()
+                      ],
+                    );
                   }
                   
                 }

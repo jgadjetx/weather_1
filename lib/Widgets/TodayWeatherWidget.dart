@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:weather_one/ViewModels/TodayWeatherViewModel.dart';
@@ -38,15 +39,11 @@ class TodayWeatherWidget extends StatelessWidget {
               children: 
               [    
                 Container(
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: NetworkImage("http://openweathermap.org/img/wn/${todayWeatherViewModel!.iconName}@2x.png")
-                    ),
-                    borderRadius: BorderRadius.circular(6)
-                  ),
                   width: 150, 
                   height: 100,
+                  child: CachedNetworkImage(
+                    imageUrl: "http://openweathermap.org/img/wn/${todayWeatherViewModel!.iconName}@2x.png",
+                  )
                 ),
                 Container(
                   margin: EdgeInsets.only(top: 20),
