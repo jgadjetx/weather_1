@@ -25,4 +25,12 @@ class DailyWeatherViewModel{
   String get description{
     return this.dailyWeather.weather[0].description;
   }
+
+  int get humidity{
+    return this.dailyWeather.main.humidity;
+  }
+
+  double get windSpeed{
+    return this.dailyWeather.wind.speed;
+  }
 }

@@ -13,28 +13,27 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        textTheme: TextTheme(
-          bodyText2: TextStyle(
-            color: Colors.white,
-          ),
-        )
-      ),
-      home: MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (_) => LocationProvider()),
-          ChangeNotifierProvider(create: (_) => WeatherProvider()),       
-        ],
-        child: Home()
-      ) 
-    );
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => LocationProvider()),
+        ChangeNotifierProvider(create: (_) => WeatherProvider()),       
+      ],
+      child: MaterialApp(
+        title: 'Weather 1',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+          textTheme: TextTheme(
+            bodyText2: TextStyle(
+              color: Colors.white,
+            ),
+          )
+        ),
+        home: Home()
+      )
+    ); 
   }
 }
 

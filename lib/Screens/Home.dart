@@ -23,9 +23,9 @@ class _HomeState extends State<Home> {
   var lattitude;
   var longitude;
 
-  void getUserLocation(){
+  void getUserLocation() async{
 
-    locationProvider.getLocation(context).then((value){
+    await locationProvider.getLocation(context).then((value) async{
 
       gotUserLocation = value;
 
@@ -35,8 +35,8 @@ class _HomeState extends State<Home> {
         longitude = locationProvider.userLocation.longitude.toString();
 
         try{
-          weatherProvider.fetchTodayWeather(lattitude, longitude);
-          weatherProvider.fetchFiveDayForecastWeather(lattitude, longitude);
+          await weatherProvider.fetchTodayWeather(lattitude, longitude);
+          await weatherProvider.fetchFiveDayForecastWeather(lattitude, longitude);
         }
         catch(e){
           Utils.displayDialog(context, "An error occured, Please try again later");
@@ -62,8 +62,6 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     
-    weatherProvider = Provider.of<WeatherProvider>(context);
-
     return Scaffold(
       backgroundColor: Colors.black,
       body: SafeArea(
@@ -73,16 +71,20 @@ class _HomeState extends State<Home> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
 
-            weatherProvider.todayWeatherViewModel != null ?
             Expanded(
               flex: 2,
-              child: TodayWeatherWidget(todayWeatherViewModel:weatherProvider.todayWeatherViewModel)
-            ): 
-            Expanded(
-              flex: 2,
-              child: Center(
-                child: Text("Loading...")
-              )
+              child: Consumer<WeatherProvider>(
+                builder: (context,weatherProvider,child ){
+
+                  if(weatherProvider.todayWeatherViewModel != null) {
+                    return TodayWeatherWidget(todayWeatherViewModel:weatherProvider.todayWeatherViewModel);
+                  }
+                  else{
+                    return Center(child: Text("Loading..."));
+                  }
+                  
+                }
+              ),
             ),
 
             Container(
@@ -98,17 +100,21 @@ class _HomeState extends State<Home> {
               ),
             ),
 
-            weatherProvider.dailyWeatherViewModel != null ?
             Expanded(
               flex: 6,
-              child: DailyWeatherListWidget(dailyWeatherViewModel: weatherProvider.dailyWeatherViewModel)
-            ) :
-            Expanded(
-              flex: 6,
-              child: Center(
-                child: Text("Loading...")
-              )
-            )
+              child: Consumer<WeatherProvider>(
+                builder: (context,weatherProvider,child ){
+
+                  if(weatherProvider.dailyWeatherViewModel != null) {
+                    return DailyWeatherListWidget(dailyWeatherViewModel: weatherProvider.dailyWeatherViewModel);
+                  }
+                  else{
+                    return Center(child: Text("Loading..."));
+                  }
+                  
+                }
+              ),
+            ),
 
           ],
         ),

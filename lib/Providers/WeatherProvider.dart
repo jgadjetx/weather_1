@@ -12,36 +12,24 @@ class WeatherProvider extends ChangeNotifier {
 
     late TodayWeatherViewModel todayWeatherViewModel;
 
-    try{
-      final results =  await WeatherService().fetchTodayWeather(lat, long);
-      todayWeatherViewModel = TodayWeatherViewModel(todayWeather: results);
-      this.todayWeatherViewModel = todayWeatherViewModel;
-      notifyListeners();
-    }
-    catch(e){
-      throw Exception("Unable to perform request!");
-    }
+    final results =  await WeatherService().fetchTodayWeather(lat, long);
+    todayWeatherViewModel = TodayWeatherViewModel(todayWeather: results);
+    this.todayWeatherViewModel = todayWeatherViewModel;
+    notifyListeners();
 
     return todayWeatherViewModel;
-    
   }
 
   Future<List<DailyWeatherViewModel>> fetchFiveDayForecastWeather(var lat, var long) async {
 
     late  List<DailyWeatherViewModel> dailyWeatherViewModel;
-
-    try{
-      final results =  await WeatherService().fetchFiveDayForecastWeather(lat, long);
-      dailyWeatherViewModel = results.map((item) => DailyWeatherViewModel(dailyWeather: item)).toList();
-      this.dailyWeatherViewModel = dailyWeatherViewModel;
-      notifyListeners();
-    }
-    catch(e){
-      throw Exception("Unable to perform request!");
-    }
+  
+    final results =  await WeatherService().fetchFiveDayForecastWeather(lat, long);
+    dailyWeatherViewModel = results.map((item) => DailyWeatherViewModel(dailyWeather: item)).toList();
+    this.dailyWeatherViewModel = dailyWeatherViewModel;
+    notifyListeners();
 
     return dailyWeatherViewModel;
-    
   }
 
 }
