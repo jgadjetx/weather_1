@@ -1,42 +1,45 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jiffy/jiffy.dart';
-import 'package:provider/provider.dart';
-import 'package:weather_one/Providers/WeatherProvider.dart';
-import 'package:weather_one/ViewModels/DailyWeatherViewModel.dart';
+import 'package:weather_one/Models/DailyWeather.dart';
 import 'package:weather_one/Widgets/DetailDailyWidget.dart';
+import 'package:weather_one/cubit/weeksweather_cubit.dart';
 
 class DailyWeatherDetails extends StatelessWidget {
   const DailyWeatherDetails({Key? key, required this.selectedDateTime}) : super(key: key);
 
   final DateTime selectedDateTime;
 
-  Future<List<DailyWeatherViewModel>> sortDates(List<DailyWeatherViewModel>? dailyWeatherViewModel) async{
-    List<DailyWeatherViewModel> sortedDailyWeatherViewModel = [];
+  Future<List<DailyWeather>> sortDates(List<DailyWeather> dailyWeather) async{
+
+    List<DailyWeather> sortedDailyWeather= [];
 
     int selectedYear = selectedDateTime.year;
     int selectedMonth = selectedDateTime.month;
     int selectedDay = selectedDateTime.day;
 
-    for(int i = 0; i <= dailyWeatherViewModel!.length -1;i++){
+    for(int i = 0; i <= dailyWeather.length -1;i++){
 
-      DateTime viewModelDate = dailyWeatherViewModel[i].dateTime;
+      DateTime modelDate = dailyWeather[i].dtTxt;
 
-      int viewModelDateYear = viewModelDate.year;
-      int viewModelDateMonth = viewModelDate.month;
-      int viewModelDateDay = viewModelDate.day;
+      int modelDateYear = modelDate.year;
+      int modelDateMonth = modelDate.month;
+      int modelDateDay = modelDate.day;
 
-      if(selectedYear == viewModelDateYear && selectedMonth == viewModelDateMonth && selectedDay == viewModelDateDay){
-        sortedDailyWeatherViewModel.add(dailyWeatherViewModel[i]);
+      if(selectedYear == modelDateYear && selectedMonth == modelDateMonth && selectedDay == modelDateDay){
+        sortedDailyWeather.add(dailyWeather[i]);
       }
     }
 
-    return sortedDailyWeatherViewModel;
+    return sortedDailyWeather;
   }
   
   @override
   Widget build(BuildContext context) {
     
-    WeatherProvider weatherProvider = Provider.of<WeatherProvider>(context);
+  
+    WeeksweatherCubit weeksweatherCubit = BlocProvider.of<WeeksweatherCubit>(context);
+    List<DailyWeather> fiveDayWeather = (weeksweatherCubit.state as WeeksweatherLoaded).fiveDayWeather;
 
     return Scaffold(
       appBar: AppBar(
@@ -45,8 +48,8 @@ class DailyWeatherDetails extends StatelessWidget {
       ),
       backgroundColor: Colors.black,
       body: SafeArea(
-        child: FutureBuilder<List<DailyWeatherViewModel>>(
-          future: sortDates(weatherProvider.dailyWeatherViewModel),
+        child: FutureBuilder<List<DailyWeather>>(
+          future: sortDates(fiveDayWeather),
           builder: (BuildContext context, snapshot) {
 
             if( snapshot.connectionState == ConnectionState.waiting){
@@ -58,7 +61,7 @@ class DailyWeatherDetails extends StatelessWidget {
               }
               else if (snapshot.hasData  && snapshot.data!.length > 0) {
                 
-                List<DailyWeatherViewModel>? data = snapshot.data;
+                List<DailyWeather>? data = snapshot.data;
 
                 return ListView.builder(
                   itemCount: data!.length,

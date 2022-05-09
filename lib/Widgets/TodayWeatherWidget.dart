@@ -1,14 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
-import 'package:weather_one/ViewModels/TodayWeatherViewModel.dart';
+import 'package:weather_one/Models/TodayWeather.dart';
 
 
 class TodayWeatherWidget extends StatelessWidget {
 
-  const TodayWeatherWidget({Key? key, required this.todayWeatherViewModel}) : super(key: key);
+  const TodayWeatherWidget({Key? key, required this.todayWeather}) : super(key: key);
 
-  final TodayWeatherViewModel? todayWeatherViewModel;
+  final TodayWeather? todayWeather;
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +42,7 @@ class TodayWeatherWidget extends StatelessWidget {
                   width: 150, 
                   height: 100,
                   child: CachedNetworkImage(
-                    imageUrl: "http://openweathermap.org/img/wn/${todayWeatherViewModel!.iconName}@2x.png",
+                    imageUrl: "http://openweathermap.org/img/wn/${todayWeather!.weather[0].icon}@2x.png",
                   )
                 ),
                 Container(
@@ -52,7 +52,7 @@ class TodayWeatherWidget extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        todayWeatherViewModel!.locationName,
+                        todayWeather!.name,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 20
@@ -61,7 +61,7 @@ class TodayWeatherWidget extends StatelessWidget {
                       Row(
                         children: [
                           Text(
-                            todayWeatherViewModel!.temp_Max.round().toString() + " \u2103",
+                            todayWeather!.main.tempMax.round().toString() + " \u2103",
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 15
@@ -71,7 +71,7 @@ class TodayWeatherWidget extends StatelessWidget {
                             width: 10,
                           ),
                           Text(
-                            todayWeatherViewModel!.temp_Min.round().toString() + " \u2103",
+                            todayWeather!.main.tempMin.round().toString() + " \u2103",
                             style: TextStyle(
                               color: Colors.grey,
                               fontWeight: FontWeight.bold,
@@ -81,7 +81,7 @@ class TodayWeatherWidget extends StatelessWidget {
                         ],
                       ),
                       Text(
-                        todayWeatherViewModel!.condition,
+                        todayWeather!.weather[0].description,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 15

@@ -1,7 +1,10 @@
+import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+part 'location_state.dart';
 
-class LocationProvider extends ChangeNotifier {
+class LocationCubit extends Cubit<LocationState> {
+  LocationCubit() : super(LocationInitial());
 
   late Position userLocation;
 
@@ -28,9 +31,8 @@ class LocationProvider extends ChangeNotifier {
     }
 
     userLocation = await Geolocator.getCurrentPosition();
-    notifyListeners();
+    emit(LocationLoaded(userLocation: userLocation));
     return true;
     
   }
-
 }
