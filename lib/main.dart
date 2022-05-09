@@ -1,9 +1,10 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:weather_one/Providers/LocationProvider.dart';
-import 'package:weather_one/Providers/WeatherProvider.dart';
 import 'package:weather_one/Screens/Home.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:weather_one/cubit/location_cubit.dart';
+import 'package:weather_one/cubit/todayweather_cubit.dart';
+import 'package:weather_one/cubit/weeksweather_cubit.dart';
 
 void main() {
   HttpOverrides.global = MyHttpOverrides();
@@ -15,10 +16,19 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
+
+    
+    return MultiBlocProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => LocationProvider()),
-        ChangeNotifierProvider(create: (_) => WeatherProvider()),       
+        BlocProvider<LocationCubit>(
+          create: (BuildContext context) => LocationCubit(),
+        ),
+        BlocProvider<TodayweatherCubit>(
+          create: (BuildContext context) => TodayweatherCubit(),
+        ),
+        BlocProvider<WeeksweatherCubit>(
+          create: (BuildContext context) => WeeksweatherCubit(),
+        ),
       ],
       child: MaterialApp(
         title: 'Weather 1',
@@ -32,7 +42,7 @@ class MyApp extends StatelessWidget {
           )
         ),
         home: Home()
-      )
+      ),
     ); 
   }
 }

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:weather_one/ViewModels/DailyWeatherViewModel.dart';
+import 'package:weather_one/Models/DailyWeather.dart';
 import 'package:weather_one/Widgets/DailyWeatherWidget.dart';
 
 class DailyWeatherListWidget extends StatefulWidget {
-  const DailyWeatherListWidget({Key? key, required this.dailyWeatherViewModel}) : super(key: key);
+  const DailyWeatherListWidget({Key? key, required this.dailyWeather}) : super(key: key);
 
-  final List<DailyWeatherViewModel>? dailyWeatherViewModel;
+  final List<DailyWeather>? dailyWeather;
 
   @override
   State<DailyWeatherListWidget> createState() => _DailyWeatherListWidgetState();
@@ -14,20 +14,20 @@ class DailyWeatherListWidget extends StatefulWidget {
 class _DailyWeatherListWidgetState extends State<DailyWeatherListWidget> {
 
   
-  Future<List<DailyWeatherViewModel>> sortDates() async{
+  Future<List<DailyWeather>> sortDates() async{
 
-    List<DailyWeatherViewModel> sortedDailyWeatherViewModel = [];
+    List<DailyWeather> sortedDailyList = [];
 
     DateTime todayNine = DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day,9,00,00);
-    DateTime earliestDateOnVM = widget.dailyWeatherViewModel![0].dateTime;
+    DateTime earliestDateOnVM = widget.dailyWeather![0].dtTxt;
     
     if(earliestDateOnVM.isBefore(todayNine)){
       //take all 9am
 
-      for(int i = 0; i <= widget.dailyWeatherViewModel!.length - 1; i++){
+      for(int i = 0; i <= widget.dailyWeather!.length - 1; i++){
 
-        if(widget.dailyWeatherViewModel![i].dateTime == todayNine){
-          sortedDailyWeatherViewModel.add(widget.dailyWeatherViewModel![i]);
+        if(widget.dailyWeather![i].dtTxt == todayNine){
+          sortedDailyList.add(widget.dailyWeather![i]);
           todayNine = todayNine.add(Duration(days: 1));
         }
  
@@ -36,32 +36,40 @@ class _DailyWeatherListWidgetState extends State<DailyWeatherListWidget> {
     }
     else{
       //take first datetime, then all following 9am
-      sortedDailyWeatherViewModel.add(widget.dailyWeatherViewModel![0]);
+      sortedDailyList.add(widget.dailyWeather![0]);
       todayNine = todayNine.add(Duration(days: 1));
 
-      for(int i = 1; i <= widget.dailyWeatherViewModel!.length -1; i++){
+      for(int i = 1; i <= widget.dailyWeather!.length -1; i++){
 
-        if(widget.dailyWeatherViewModel![i].dateTime == todayNine){
-          sortedDailyWeatherViewModel.add(widget.dailyWeatherViewModel![i]);
+        if(widget.dailyWeather![i].dtTxt == todayNine){
+          sortedDailyList.add(widget.dailyWeather![i]);
           todayNine = todayNine.add(Duration(days: 1));
         }
 
       }
     }
 
-    return sortedDailyWeatherViewModel;
+    return sortedDailyList;
+
   }
 
   @override
   Widget build(BuildContext context) {
 
     return Container(
-      child: FutureBuilder<List<DailyWeatherViewModel>>(
+      child: FutureBuilder<List<DailyWeather>>(
         future: sortDates(),
         builder: (BuildContext context, snapshot) { 
 
           if( snapshot.connectionState == ConnectionState.waiting){
-            return Text("Sorting list");
+            return Center(
+              child: Container(
+                margin: EdgeInsets.only(bottom: 10),
+                height: 60,
+                width: 60,
+                child: Image.asset("images/cloud.png"),
+              ),  
+            );
           }
           else{
             if (snapshot.hasError){
@@ -69,7 +77,7 @@ class _DailyWeatherListWidgetState extends State<DailyWeatherListWidget> {
             }
             else if (snapshot.hasData  && snapshot.data!.length > 0) {
               
-              List<DailyWeatherViewModel>? data = snapshot.data;
+              List<DailyWeather>? data = snapshot.data;
 
               return ListView.builder(
                 itemCount: data!.length,

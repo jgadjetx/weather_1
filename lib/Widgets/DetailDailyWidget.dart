@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
-import 'package:weather_one/ViewModels/DailyWeatherViewModel.dart';
+import 'package:weather_one/Models/DailyWeather.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class DetailDailyWidget extends StatelessWidget {
   const DetailDailyWidget({Key? key, required this.weatherData}) : super(key: key);
 
-  final DailyWeatherViewModel weatherData;
+  final DailyWeather weatherData;
   
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,7 @@ class DetailDailyWidget extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(Jiffy(weatherData.dateTime).format("HH:mm"), style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                Text(Jiffy(weatherData.dtTxt).format("HH:mm"), style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                 SizedBox(
                   height: 10,
                 ),
@@ -33,7 +33,7 @@ class DetailDailyWidget extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                       weatherData.temp_Max.round().toString() + " \u2103",
+                       weatherData.main.tempMax.round().toString() + " \u2103",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
@@ -42,7 +42,7 @@ class DetailDailyWidget extends StatelessWidget {
                       width: 10,
                     ),
                     Text(
-                      weatherData.temp_Min.round().toString() + " \u2103",
+                      weatherData.main.tempMin.round().toString() + " \u2103",
                       style: TextStyle(
                         color: Colors.grey,
                         fontWeight: FontWeight.bold,
@@ -53,7 +53,7 @@ class DetailDailyWidget extends StatelessWidget {
                 SizedBox(
                   height: 10,
                 ),
-                Text(weatherData.description),
+                Text(weatherData.weather[0].description),
               ],
             )
           ),
@@ -64,12 +64,12 @@ class DetailDailyWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text("Humidty"),
-                Text("${weatherData.humidity}%"),
+                Text("${weatherData.main.humidity}%"),
                 SizedBox(
                   height: 10,
                 ),
                 Text("Wind Speed"),
-                Text("${weatherData.windSpeed} km/h")
+                Text("${weatherData.wind.speed} km/h")
               ],
             )
           ),
@@ -83,7 +83,7 @@ class DetailDailyWidget extends StatelessWidget {
                   width: 150, 
                   height: 100,
                   child: CachedNetworkImage(
-                    imageUrl: "http://openweathermap.org/img/wn/${weatherData.iconName}@2x.png",
+                    imageUrl: "http://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png",
                   ),
                 ),
               ],

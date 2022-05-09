@@ -1,22 +1,21 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
+import 'package:weather_one/Models/DailyWeather.dart';
 import 'package:weather_one/Screens/DailyWeatherDetails.dart';
-import 'package:weather_one/ViewModels/DailyWeatherViewModel.dart';
+
 
 class DailyWeatherWidget extends StatelessWidget {
   const DailyWeatherWidget({Key? key, required this.weatherData}) : super(key: key);
 
-  final DailyWeatherViewModel weatherData;
+  final DailyWeather weatherData;
   
   @override
   Widget build(BuildContext context) {
 
     return GestureDetector(
       onTap: () {
-        DateTime selectedDateTime = weatherData.dateTime;
-
-        
+        DateTime selectedDateTime = weatherData.dtTxt;
         Navigator.of(context).push(MaterialPageRoute(builder: (context) => DailyWeatherDetails(selectedDateTime: selectedDateTime)));
       },
       child: Container(
@@ -33,9 +32,9 @@ class DailyWeatherWidget extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(Jiffy(weatherData.dateTime).format("dd MMMM")),
-                  Text(Jiffy(weatherData.dateTime).format("EEEE")),
-                  Text(weatherData.description),
+                  Text(Jiffy(weatherData.dtTxt).format("dd MMMM")),
+                  Text(Jiffy(weatherData.dtTxt).format("EEEE")),
+                  Text(weatherData.weather[0].description),
                 ],
               )
             ),
@@ -48,7 +47,7 @@ class DailyWeatherWidget extends StatelessWidget {
                     width: 150, 
                     height: 100,
                     child: CachedNetworkImage(
-                      imageUrl: "http://openweathermap.org/img/wn/${weatherData.iconName}@2x.png",
+                      imageUrl: "http://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png",
                     ),
                   ),
                 ],
@@ -62,7 +61,7 @@ class DailyWeatherWidget extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                         weatherData.temp_Max.round().toString() + " \u2103",
+                         weatherData.main.tempMax.round().toString() + " \u2103",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
@@ -71,7 +70,7 @@ class DailyWeatherWidget extends StatelessWidget {
                         width: 10,
                       ),
                       Text(
-                        weatherData.temp_Min.round().toString() + " \u2103",
+                        weatherData.main.tempMin.round().toString() + " \u2103",
                         style: TextStyle(
                           color: Colors.grey,
                           fontWeight: FontWeight.bold,
