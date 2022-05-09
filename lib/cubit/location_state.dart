@@ -19,3 +19,5 @@ class LocationLoaded extends LocationState{
     return userLocation.longitude;
   }
 }
+
+class LocationFailed extends LocationState{}

@@ -11,3 +11,8 @@ class TodayWeatherLoaded extends TodayweatherState{
 
   TodayWeatherLoaded({required this.todayWeather});
 }
+
+
+class TodayWeatherFailed extends TodayweatherState{
+  
+}

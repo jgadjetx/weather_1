@@ -10,29 +10,35 @@ class LocationCubit extends Cubit<LocationState> {
 
   Future<bool> getLocation(BuildContext context) async {
 
+    bool gotLocation = false;
     bool serviceEnabled;
     LocationPermission permission;
     
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      return false;
+      emit(LocationFailed());
+      return gotLocation;
     }
 
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.deniedForever) {
-      return false; 
+      emit(LocationFailed());
+      return gotLocation; 
     }
 
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission != LocationPermission.whileInUse && permission != LocationPermission.always) {
-        return false;
+        emit(LocationFailed());
+        return gotLocation;
       }
     }
 
+    gotLocation = true;
     userLocation = await Geolocator.getCurrentPosition();
     emit(LocationLoaded(userLocation: userLocation));
-    return true;
+    
+    return gotLocation;
     
   }
 }

@@ -5,6 +5,9 @@ import 'package:weather_one/Models/DailyWeather.dart';
 import 'package:weather_one/Models/TodayWeather.dart';
 import 'package:weather_one/Services/Utils.dart';
 import 'package:weather_one/Widgets/DailyWeatherListWidget.dart';
+import 'package:weather_one/Widgets/FailedToGetLocationWidget.dart';
+import 'package:weather_one/Widgets/LoadingWidget.dart';
+import 'package:weather_one/Widgets/HorizontalWhiteLine.dart';
 import 'package:weather_one/Widgets/ShimmerBlock.dart';
 import 'package:weather_one/Widgets/TodayWeatherWidget.dart';
 import 'package:weather_one/cubit/location_cubit.dart';
@@ -46,14 +49,7 @@ class _HomeState extends State<Home> {
         
       }
       else{
-        
-        Utils.customDisplayDialog(context, "An error occured while getting your location, Please enable your location services", "Enable",() async{
-          Navigator.of(context).pop();
-          Geolocator.openLocationSettings().then((value){
-            getUserLocation();
-          });
-         
-        });
+        Geolocator.openLocationSettings();
       }
 
     });
@@ -82,21 +78,7 @@ class _HomeState extends State<Home> {
 
             if(locationState is LocationInitial){
 
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(bottom: 10),
-                      height: 60,
-                      width: 60,
-                      child: Image.asset("images/cloud.png"),
-                    ),  
-                    Text("Getting your location...")
-                  ]
-                )
-              );
+              return LoadingWidget(message: 'Getting your location...');
 
             }
             else if(locationState is LocationLoaded){
@@ -114,21 +96,8 @@ class _HomeState extends State<Home> {
                   
                         if(todayWeatherState is TodayweatherInitial){
                   
-                          return Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Container(
-                                  margin: EdgeInsets.only(bottom: 10),
-                                  height: 60,
-                                  width: 60,
-                                  child: Image.asset("images/cloud.png"),
-                                ),  
-                                Text("Getting today's weather...")
-                              ]
-                            )
-                          );
+                          return LoadingWidget(message:"Getting today's weather...");
+
                         }
                         else if(todayWeatherState is TodayWeatherLoaded){
                           
@@ -143,18 +112,7 @@ class _HomeState extends State<Home> {
                   ),
 
                   
-                  Container(
-                    alignment: Alignment.center,
-                    child: Padding(
-                      padding: EdgeInsets.only(left: 10,right: 10),
-                      child: Container(
-                        height: 1.5,
-                        width: MediaQuery.of(context).size.width * 0.5,
-                        color: Colors.white,
-                        margin: EdgeInsets.only(bottom: 15.0),
-                      ),
-                    ),
-                  ),
+                  HorizontalWhiteLine(),
 
                   //weeks weather
                   Expanded(
@@ -177,8 +135,7 @@ class _HomeState extends State<Home> {
                         else if(weeksWeatherState is WeeksweatherLoaded){
                            
                           List<DailyWeather> weeklyWeatherState = weeksWeatherState.fiveDayWeather;
-                          return DailyWeatherListWidget(dailyWeather: weeklyWeatherState);
-                                
+                          return DailyWeatherListWidget(dailyWeather: weeklyWeatherState);                               
                         }
                   
                         return Container();
@@ -189,6 +146,10 @@ class _HomeState extends State<Home> {
                 ],
               );
             }     
+            else if(locationState is LocationFailed){
+
+              return FaliedToGetLocationWidget(onPressed: getUserLocation);
+            }
 
             return Container();
           }

@@ -10,3 +10,7 @@ class WeeksweatherLoaded extends WeeksweatherState {
 
   WeeksweatherLoaded({required this.fiveDayWeather});
 }
+
+class WeeksweatherFailed extends WeeksweatherState {
+  
+}
