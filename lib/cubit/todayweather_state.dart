@@ -12,7 +12,11 @@ class TodayWeatherLoaded extends TodayweatherState{
   TodayWeatherLoaded({required this.todayWeather});
 }
 
+class TodayWeatherLive extends TodayweatherState{
 
-class TodayWeatherFailed extends TodayweatherState{
-  
+  final TodayWeather todayWeatherLive;
+
+  TodayWeatherLive({required this.todayWeatherLive});
 }
+
+class TodayWeatherFailed extends TodayweatherState{}

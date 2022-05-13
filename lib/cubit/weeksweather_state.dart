@@ -11,6 +11,11 @@ class WeeksweatherLoaded extends WeeksweatherState {
   WeeksweatherLoaded({required this.fiveDayWeather});
 }
 
-class WeeksweatherFailed extends WeeksweatherState {
-  
+class WeeksweatherLive extends WeeksweatherState {
+  final List<DailyWeather> fiveDayWeatherLive;
+
+  WeeksweatherLive({required this.fiveDayWeatherLive});
 }
+
+class WeeksweatherFailed extends WeeksweatherState {}
+

@@ -8,7 +8,7 @@ class LocationCubit extends Cubit<LocationState> {
 
   late Position userLocation;
 
-  Future<bool> getLocation(BuildContext context) async {
+  Future<bool> getLocation() async {
 
     bool gotLocation = false;
     bool serviceEnabled;
